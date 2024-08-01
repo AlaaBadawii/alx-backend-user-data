@@ -9,7 +9,9 @@ def filter_datum(
         message: str,  # representing the log line
         separator: str):
     """ returns the log message obfuscated """
-    for key in fields:
-        pattern = rf'({key}=)[^{separator}]+'
-        message = re.sub(pattern, rf'\1{redaction}', message)
+    for field in fields:
+        message = re.sub(
+            rf"{field}=.+?{separator}",
+            f"{field}={redaction}{separator}",
+            message)
     return message
