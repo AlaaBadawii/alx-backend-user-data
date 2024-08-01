@@ -17,8 +17,8 @@ PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 def filter_datum(fields: List[str], redaction: str,
                  message: str, separator: str,) -> str:
-    extract, replace = (patterns["extract"], patterns["replace"])
-    return re.sub(extract(fields, separator), replace(redaction), message)
+    """Returns the log message obfuscated."""
+    return re.sub(patterns["extract"](fields, separator), patterns["replace"](redaction), message)
 
 
 def get_logger() -> logging.Logger:
