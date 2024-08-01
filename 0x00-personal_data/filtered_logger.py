@@ -21,6 +21,19 @@ def sub(fields: List[str], redaction: str,
     return message
 
 
+def get_logger() -> logging.Logger:
+    """get_logger function that takes no arguments
+    and returns a logging.Logger object"""
+    logger = logging.getLogger("user_data")
+    logger.setLevel(logging.INFO)
+    streamHandler = logging.StreamHandler()
+    streamHandler.formatter(RedactingFormatter)
+    logger.addHandler(streamHandler)
+    logger.propagate = False
+
+    return logger
+
+
 class RedactingFormatter(logging.Formatter):
     """ Redacting Formatter class
     """
