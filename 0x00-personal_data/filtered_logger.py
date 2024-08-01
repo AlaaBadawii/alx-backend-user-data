@@ -22,12 +22,11 @@ def sub(fields: List[str], redaction: str,
 
 
 def get_logger() -> logging.Logger:
-    """get_logger function that takes no arguments
-    and returns a logging.Logger object"""
+    """Creates a new logger for user data."""
     logger = logging.getLogger("user_data")
-    logger.setLevel(logging.INFO)
     streamHandler = logging.StreamHandler()
-    streamHandler.formatter(RedactingFormatter)
+    streamHandler.formatter(RedactingFormatter(PII_FIELDS))
+    logger.setLevel(logging.INFO)
     logger.addHandler(streamHandler)
     logger.propagate = False
 
