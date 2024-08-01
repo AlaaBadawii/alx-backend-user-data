@@ -19,3 +19,26 @@ def sub(fields: List[str], redaction: str,
         pattern = rf'({field}=).*?({separator})'
         message = re.sub(pattern, fr'\1{redaction}\2', message)
     return message
+
+
+import logging
+
+
+class RedactingFormatter(logging.Formatter):
+    """ Redacting Formatter class
+        """
+
+    REDACTION = "***"
+    FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
+    SEPARATOR = ";"
+
+    def __init__(self, fields: list[str]):
+        """ Constructor method
+            """
+        super(RedactingFormatter, self).__init__(self.FORMAT)
+        self.fields = fields
+
+    def format(self, record: logging.LogRecord) -> str:
+        """ format method"""
+        return filter_datum(self.fields, self.REDACTION,
+                            super().format(record), self.SEPARATOR)
