@@ -15,10 +15,18 @@ patterns = {
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
+def sub(fields: List[str], redaction: str,
+        message: str, separator: str) -> str:
+    """Returns the log message obfuscated.
+    """
+    extract, replace = (patterns["extract"], patterns["replace"])
+    return re.sub(extract(fields, separator), replace(redaction), message)
+
+
 def filter_datum(fields: List[str], redaction: str,
                  message: str, separator: str,) -> str:
     """Returns the log message obfuscated."""
-    return re.sub(patterns["extract"](fields, separator), patterns["replace"](redaction), message)
+    return sub(fields, redaction, message, separator)
 
 
 def get_logger() -> logging.Logger:
