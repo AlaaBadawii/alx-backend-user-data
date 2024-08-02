@@ -59,11 +59,11 @@ def main():
     rows = cursor.fetchall()
     logger = get_logger()
     for row in rows:
-        filtered_row = "; ".join([f"{field}={RedactingFormatter.REDACTION}" for field in PII_FIELDS])
+        filtered_row = "; ".join([f"{field}={RedactingFormatter.REDACTION}"
+                                  for field in PII_FIELDS])
         logger.info(filtered_row, extra={"user_data": row})
     cursor.close()
     connection.close()
-
 
 
 class RedactingFormatter(logging.Formatter):
