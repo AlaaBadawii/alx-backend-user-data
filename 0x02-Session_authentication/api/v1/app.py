@@ -55,10 +55,9 @@ def before_request():
     if auth is None:
         return
     paths = ['/api/v1/status/',
-         '/api/v1/unauthorized/',
-         '/api/v1/forbidden/',
-         '/api/v1/auth_session/login',
-    ]
+             '/api/v1/unauthorized/',
+             '/api/v1/forbidden/',
+             '/api/v1/auth_session/login']
     path = request.path
 
     if not auth.require_auth(path=path, excluded_paths=paths):
