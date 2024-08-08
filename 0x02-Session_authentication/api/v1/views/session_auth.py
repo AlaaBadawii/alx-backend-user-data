@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-""" session_auth module
-"""
+
 from flask import jsonify, abort, request
 from api.v1.views import app_views
 from models.user import User
