@@ -61,6 +61,8 @@ class DB:
             raise
 
     def update_user(self, user_id: int, **kwargs) -> None:
+        """ Updates a user based on a given id.
+        """
         try:
             if not kwargs:
                 raise ValueError
