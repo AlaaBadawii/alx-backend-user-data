@@ -71,9 +71,11 @@ class DB:
                     raise ValueError
 
             self._session.commit()
+            return None
 
         except (NoResultFound, InvalidRequestError):
             self._session.rollback()
+            return None
         except Exception:
             self._session.rollback()
             raise ValueError
