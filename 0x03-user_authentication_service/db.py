@@ -29,11 +29,13 @@ class DB:
             DBSession = sessionmaker(bind=self._engine)
             self.__session = DBSession()
         return self.__session
-    
-    @staticmethod
+
     def add_user(self, email, hashed_password):
         """ save the user to the database.
         No validations are required at this stage.
         """
-        session = self._session()
-        user = User()
+        session = self._session
+        user = User(email=email, hashed_password=hashed_password)
+        session.add(user)
+        session.commit()
+        return user
