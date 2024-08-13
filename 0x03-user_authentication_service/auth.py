@@ -43,7 +43,6 @@ class Auth:
         except(NoResultFound, InvalidRequestError):
             return False
 
-    def _generate_uuid(self) -> str:
-        """ A private method return a string representation of a new UUID
-        """
+    def _generate_uuid() -> str:
+        """Generate and return a string representation of a new UUID."""
         return str(uuid.uuid4())
