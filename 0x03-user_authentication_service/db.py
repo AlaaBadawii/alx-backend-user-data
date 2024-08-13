@@ -62,19 +62,18 @@ class DB:
 
     def update_user(self, user_id: int, **kwargs) -> None:
         try:
-            if not kwargs:
-                raise ValueError
             user = self.find_user_by(id=user_id)
+
             for k, v in kwargs.items():
                 if hasattr(user, k):
                     setattr(user, k, v)
                 else:
                     raise ValueError
+
             self._session.commit()
-            return None
+
         except (NoResultFound, InvalidRequestError):
             self._session.rollback()
-            raise ValueError
         except Exception:
             self._session.rollback()
             raise ValueError
