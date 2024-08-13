@@ -43,3 +43,19 @@ class DB:
             self._session.rollback()
             new_user = None
         return new_user
+
+    def find_user_by(self, **kwargs: str) -> User:
+        """  takes in arbitrary keyword arguments and
+        returns the first row found in the users table
+        """
+        try:
+            user = self._session.query(User).filter_by(**kwargs).first()
+            if user is None:
+                raise NoResultFound
+            return user
+        except NoResultFound:
+            self._session.rollback()
+            raise
+        except InvalidRequestError:
+            self._session.rollback()
+            raise
