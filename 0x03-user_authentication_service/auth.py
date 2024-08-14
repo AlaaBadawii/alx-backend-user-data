@@ -89,5 +89,4 @@ class Auth:
             return reset_token
         except (NoResultFound, InvalidRequestError):
             raise ValueError
-
-        
+       
