@@ -87,15 +87,15 @@ def update_password() -> str:
 
     try:
         user = AUTH._db.find_user_by(email=email)
-
-        if user.reset_token != reset_token:
-            abort(403)
-
         AUTH.update_password(reset_token, new_password)
-        return jsonify({"email": email, "message": "Password updated"}), 200
-
+        is_password_changed = True
     except ValueError:
         abort(403)
+    if not is_password_changed:
+        abort(403)
+
+    return jsonify({"email": email, "message": "Password updated"})
+
 
 
 if __name__ == "__main__":
