@@ -28,23 +28,20 @@ def register():
 
 
 @app.route('/sessions', methods=['POST'])
-def sessions():
+def login():
     """ create a new session for the user,
     store it the session ID as a cookie with key
     """
     email = request.form.get('email')
     pwd = request.form.get('password')
-    if not pwd or not email:
+
+    if not Auth.valid_login(email=email, password=pwd):
         abort(401)
-    auth_instance = Auth()
-    if auth_instance.valid_login(email=email, password=pwd):
-        session_id = auth_instance.create_session(email=email)
-        if session_id:
-            response = jsonify({"email": "<user email>", "message": "logged in"})
-            response.set_cookie("session_id",session_id)
-            return response
-    else:
-        abort(401)
+
+    session_id = Auth.create_session(email=email)
+    response = jsonify({"email": email, "message": "logged in"})
+    response.set_cookie("session_id", session_id)
+    return response
 
 
 if __name__ == "__main__":
