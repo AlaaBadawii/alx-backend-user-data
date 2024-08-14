@@ -74,8 +74,7 @@ class Auth:
         """ Destroy a session
         """
         try:
-            self._db.update_user(user_id, {"session_id": None})
+            self._db.update_user(user_id, session_id=None)
             return None
         except(InvalidRequestError, NoResultFound, ValueError):
             return None
-
