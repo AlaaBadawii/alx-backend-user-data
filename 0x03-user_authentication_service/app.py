@@ -29,8 +29,9 @@ def register():
 
 @app.route('/sessions', methods=['POST'], strict_slashes=False)
 def login() -> str:
-    """ create a new session for the user,
-    store it the session ID as a cookie with key
+    """POST /sessions
+    Return:
+        - The account login payload.
     """
     email, password = request.form.get("email"), request.form.get("password")
 
