@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """ app module
 """
-from flask import Flask, render_template, request, jsonify, abort
+from flask import (Flask, render_template, request,
+                   jsonify, abort, redirect, url_for)
 from auth import Auth
 
 app = Flask(__name__)
@@ -9,7 +10,7 @@ AUTH = Auth()
 
 
 @app.route('/', methods=['GET'])
-def message():
+def home():
     return jsonify({"message": "Bienvenue"})
 
 
@@ -40,6 +41,18 @@ def login() -> str:
     response = jsonify({"email": email, "message": "logged in"})
     response.set_cookie("session_id", session_id)
     return response
+
+
+@app.route('/sessions', methods=['DELETE'], strict_slashes=False)
+def logout():
+    """ Logout 
+    """
+    session_id = request.form.get("session_id")
+    user = Auth.get_user_from_session_id(session_id)
+    if user is None:
+        abort(403)
+    Auth.destroy_session(user.id)
+    redirect(url_for('home'))
 
 
 if __name__ == "__main__":
