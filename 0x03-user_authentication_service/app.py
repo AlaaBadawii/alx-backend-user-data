@@ -66,10 +66,25 @@ def profile() -> str:
     return jsonify({"email": user.email})
 
 
-@app.route("/reset_password", methods=["POST"], strict_slashes=False)
+@app.route("/reset_password", methods=["POST", "PUT"], strict_slashes=False)
 def get_reset_password_token() -> str:
     """ generate a token
     """
+    if request.method == "PUT":
+        email = request.form.get("email")
+        reset_token = request.form.get("reset_token")
+        new_password = request.form.get("new_password")
+        try:
+            current_token = AUTH.get_reset_password_token(email)
+        except Exception:
+            abort(403)
+        if current_token == reset_token:
+            try:
+                AUTH.update_password(reset_token, new_password)
+            except Exception:
+                abort(403)
+            return jsonify({"email": "<user email>", "message": "Password updated"}), 200
+
     email = request.form.get("email")
     try:
         reset_token = AUTH.get_reset_password_token(email)
@@ -77,25 +92,6 @@ def get_reset_password_token() -> str:
     except ValueError:
         abort(403)
 
-
-@app.route("/reset_password", methods=["PUT"], strict_slashes=False)
-def update_password() -> str:
-    """ Reset user's password
-    """
-    email = request.form.get("email")
-    reset_token = request.form.get("reset_token")
-    new_password = request.form.get("new_password")
-    try:
-        current_token = AUTH.get_reset_password_token(email)
-    except Exception:
-        abort(403)
-    if current_token == reset_token:
-        try:
-            AUTH.update_password(reset_token, new_password)
-        except Exception:
-            abort(403)
-        return jsonify({"email": "<user email>", "message": "Password updated"}), 200
-    
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="5000"), 200
